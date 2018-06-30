@@ -159,16 +159,22 @@ class UserTests(unittest.TestCase):
             data=dict(username='user111', password='aaaaaa'),
             follow_redirects=True)
 
+        # follows user2
         response = client.post("/users/2/followers", follow_redirects=True)
 
+        # checks if user2's username shown in the follower's page
         self.assertIn(b"user222", response.data)
 
+        # get the list of who user1 follows
         user_1_following = [u.username for u in User.query.get(1).following]
 
+        # check if user2's username in the list
         self.assertIn("user222", user_1_following)
 
+        # get the list of all user2's followees
         user_2_followers = [u.username for u in User.query.get(2).followers]
 
+        # check if user1's username is in the list
         self.assertIn("user111", user_2_followers)
 
 
